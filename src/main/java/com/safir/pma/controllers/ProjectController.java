@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
 import com.safir.pma.dao.EmployeeRepository;
-import com.safir.pma.dao.ProjectRepository;
 import com.safir.pma.entities.Employee;
 import com.safir.pma.entities.Project;
+import com.safir.pma.services.ProjectService;
 
 @Controller
 @RequestMapping("/projects")
 public class ProjectController {
 
 	@Autowired
-	ProjectRepository proRepo;
+	ProjectService proService;
 	
 	@Autowired
 	EmployeeRepository empRepo;
 
 	@GetMapping
 	public String displayProjects(Model models) {
-		List<Project> projects = proRepo.findAll();
+		List<Project> projects = proService.getall();
 		models.addAttribute("projects", projects);
 		return "projects/list-projects";
 	}
@@ -46,7 +46,7 @@ public class ProjectController {
 	public String createProject(Project project, Model model) {
 
 		// saving to database
-		proRepo.save(project);
+		proService.save(project);
 		
 //		Iterable<Employee>choosenEmployees=empRepo.findAllById(employees);
 //		
