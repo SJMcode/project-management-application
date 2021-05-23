@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.safir.pma.dao.EmployeeRepository;
 import com.safir.pma.entities.Employee;
+import com.safir.pma.services.EmployeeService;
 
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
 	
 	@Autowired
-	EmployeeRepository empRepo;
+	EmployeeService empService;
 	
 	@GetMapping
 	public String displayEmployees(Model models) {
-		List<Employee> employees = empRepo.findAll();
+		List<Employee> employees = empService.getall();
 		models.addAttribute("employees", employees);
 		return "employees/list-employees";
 	}
@@ -37,7 +37,7 @@ public class EmployeeController {
 	@PostMapping("/save")
 	public String CreateEmployee(Model model, Employee employee) {
 
-		empRepo.save(employee);
+		empService.save(employee);
 		return "redirect:/employees/new";
 }
 	@GetMapping("/")
@@ -51,7 +51,7 @@ public class EmployeeController {
 		
 		//Querying database for employees
 		
-		List<Employee> employees = empRepo.findAll();
+		List<Employee> employees = empService.getall();
 		models.addAttribute("employees", employees);
 		
 		return "employees/new-employee";
