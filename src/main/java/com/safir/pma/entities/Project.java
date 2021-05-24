@@ -13,6 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 @Entity
 //@Table(name="employee", schema="schema.sql")
@@ -23,10 +27,16 @@ public class Project {
 	@SequenceGenerator(name = "project_generator", sequenceName = "project_seq", allocationSize = 1)
 	private long projectId;
 	
+	@NotNull
+	@Size(min=2, max=50)
 	private String name;
 	
+	@NotNull
+	@Size(min=2, max=50)
 	private String stage; // NOSTARTED,COMPLETED,INPROGRESS
 	
+	@NotNull
+	@Size(min=2, max=50)
 	private String description;
 	
 	@ManyToMany(cascade= {CascadeType.DETACH,CascadeType.MERGE, CascadeType.REFRESH,CascadeType.PERSIST},
@@ -34,6 +44,7 @@ public class Project {
 	@JoinTable(name="project_employee",
 			joinColumns=@JoinColumn(name="project_Id"),
 			inverseJoinColumns=@JoinColumn(name="employee_Id"))
+	@JsonIgnore
 	List<Employee> employees;
 	
 	
