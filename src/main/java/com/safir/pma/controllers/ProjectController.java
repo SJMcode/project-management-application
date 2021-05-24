@@ -1,7 +1,5 @@
 package com.safir.pma.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +25,7 @@ public class ProjectController {
 
 	@GetMapping
 	public String displayProjects(Model models) {
-		List<Project> projects = proService.getall();
+		Iterable<Project> projects = proService.getall();
 		models.addAttribute("projects", projects);
 		return "projects/list-projects";
 	}
@@ -35,7 +33,7 @@ public class ProjectController {
 	@GetMapping("/new")
 	public String projects(Model model) {
 		
-		List<Employee> employees = empRepo.findAll();;
+		Iterable<Employee> employees = empRepo.findAll();;
 		model.addAttribute("allEmployees", employees);
 		Project aProject = new Project();
 		model.addAttribute("project", aProject);

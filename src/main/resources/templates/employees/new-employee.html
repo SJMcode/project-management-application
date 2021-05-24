@@ -4,21 +4,35 @@
 	
 	<body>
 	<nav th:replace="layouts::navbar"></nav>
-
+	<br>
 	<div class="container">
 		
-		<h3>Create Employee</h3>
+		<h3></h3>
 			
-		<form action="/employees/save" th:object="${employee}" method="POST">
+		<form th:action="@{/employees/save}" th:object="${employee}" method="POST">
 			
+				<!-- This was used to bind the employee that was click on USED FOR UPDATE-->
+				<input type="hidden" th:field="${employee.employeeId}"/>
+				<div class="form-group row">
 				<input type="text" placeholder="First Name" th:field="${employee.firstName}" >
+				<span style="color:red" if="${#fields.hasErrors('firstName')}"
+					th:errors="${employee.firstName}">
+				</span>
+				</div>
+				<div class="form-group row">
 				<input type="text" placeholder="Last Name" th:field="${employee.lastName}" >
+					<span style="color:red" th:if="${#fields.hasErrors('lastName')}"
+					th:errors="${employee.lastName}">
+				</span>
+				</div>
+				<div class="form-group row">
 				<input type="text" placeholder="email" th:field="${employee.email}" >
+						<span style="color:red" th:if="${#fields.hasErrors('email')}"
+						th:errors="${employee.email}">
+				</span>
+				</div>
 						
-				
-
-				
-				<button type="submit"> Create Employee</button>
+				<button class="btn btn-info col-2" type="submit"> Enter Employee</button>
 				
 		</form>
 	</div>

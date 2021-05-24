@@ -1,13 +1,15 @@
 package com.safir.pma.controllers;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.safir.pma.entities.Employee;
 import com.safir.pma.services.EmployeeService;
@@ -21,7 +23,7 @@ public class EmployeeController {
 	
 	@GetMapping
 	public String displayEmployees(Model models) {
-		List<Employee> employees = empService.getall();
+		Iterable<Employee> employees = empService.getall();
 		models.addAttribute("employees", employees);
 		return "employees/list-employees";
 	}
@@ -35,10 +37,12 @@ public class EmployeeController {
 	}
 	
 	@PostMapping("/save")
-	public String CreateEmployee(Model model, Employee employee) {
+	public String CreateEmployee(Model model, @Valid Employee employee, Errors error) {
 
+			if(error.hasErrors())
+				return "employees/new-employee";
 		empService.save(employee);
-		return "redirect:/employees/new";
+		return "redirect:/employees";
 }
 	@GetMapping("/")
 	public String displayHome(Model models) {
@@ -51,10 +55,23 @@ public class EmployeeController {
 		
 		//Querying database for employees
 		
-		List<Employee> employees = empService.getall();
+		Iterable<Employee> employees = empService.getall();
 		models.addAttribute("employees", employees);
 		
 		return "employees/new-employee";
 	}
+	@GetMapping("/update")
+	public String displayEmployeeUpdateForm(@RequestParam("id") long empId, Model model) {
+			
+			Employee theEmp=empService.findByEmployeeId(empId);
+			model.addAttribute("employee",theEmp);
+		return "employees/new-employee";
+	}
 	
+	@GetMapping("/delete")
+	public String deleteEmployee(@RequestParam("id") long empId) {
+			Employee theEmp=empService.findByEmployeeId(empId);
+			empService.delete(theEmp);
+		return "redirect:/employees";
+	}
 }
